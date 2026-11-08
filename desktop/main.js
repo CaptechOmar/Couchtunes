@@ -15,11 +15,22 @@ function create() {
     cb({ responseHeaders: h });
   });
   const win = new BrowserWindow({
-    width: 1280, height: 720, fullscreen: true, minWidth: 640, minHeight: 400, backgroundColor: '#111111', title: 'Couchtunes',
+    width: 1280, height: 720, show: false, minWidth: 640, minHeight: 400, backgroundColor: '#111111', title: 'Couchtunes',
     autoHideMenuBar: true, icon: path.join(__dirname, 'icon.png'),
     webPreferences: { backgroundThrottling: false, spellcheck: false }
   });
   Menu.setApplicationMenu(null);
+  // Go full screen once the window exists. Asking for it at creation left the picture short of the screen edges
+  // under Wayland (the Flatpak build), so we also check the size afterwards and redo it if it came out wrong.
+  win.once('ready-to-show', () => {
+    win.show(); win.setFullScreen(true);
+    setTimeout(async () => {
+      try {
+        const bad = await win.webContents.executeJavaScript('Math.abs(innerWidth - screen.width) > 2 || Math.abs(innerHeight - screen.height) > 2');
+        if (bad && win.isFullScreen()) { win.setFullScreen(false); setTimeout(() => win.setFullScreen(true), 400); }
+      } catch (e) {}
+    }, 1200);
+  });
   // ?tv turns on the 10-foot layout, focus navigation and game controller support
   win.loadFile(path.join(__dirname, 'app', 'index.html'), { query: { tv: '1' } });
   win.webContents.on('before-input-event', (e, i) => {
