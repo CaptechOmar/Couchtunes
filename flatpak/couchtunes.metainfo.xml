@@ -40,11 +40,16 @@
       <image type="source">https://raw.githubusercontent.com/@OWNER@/Couchtunes/main/docs/screenshots/album-view.png</image>
     </screenshot>
     <screenshot>
+      <caption>The full-screen player</caption>
+      <image type="source">https://raw.githubusercontent.com/@OWNER@/Couchtunes/main/docs/screenshots/now-playing.png</image>
+    </screenshot>
+    <screenshot>
       <caption>Synced lyrics</caption>
       <image type="source">https://raw.githubusercontent.com/@OWNER@/Couchtunes/main/docs/screenshots/lyrics.png</image>
     </screenshot>
   </screenshots>
   <releases>
+    <release version="2.16.4" date="2026-11-08"/>
     <release version="2.16.3" date="2026-11-03"/>
     <release version="2.16.2" date="2026-11-03"/>
     <release version="2.16.1" date="2026-11-03"/>

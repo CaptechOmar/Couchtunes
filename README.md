@@ -137,3 +137,5 @@ Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 [MIT](LICENSE). The desktop builds include Electron, which is MIT licensed, and Chromium, whose licenses ship inside each build.
+
+Ogg Opus playback on TVs uses [ogg-opus-decoder](https://github.com/eshaz/wasm-audio-decoders) (MIT, © Ethan Halsall), embedded in the app. Added by [@Grumley](https://github.com/Grumley) in #3.
