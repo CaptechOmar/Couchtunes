@@ -71,7 +71,8 @@ svg.i{width:1.25rem;height:1.25rem;flex:none;display:block}
 .pill a:hover,.pill button:hover{opacity:1;background:var(--hover)}
 .pill svg.i{width:1.15rem;height:1.15rem;color:inherit}
 .pill .ico{padding:.55rem .8rem}
-.tv .pill a:focus,.tv .pill button:focus,.tv .pill a:focus-visible,.tv .pill button:focus-visible{outline:none;background:#fff;color:#111;opacity:1;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3)}
+.tv .pill a:focus,.tv .pill button:focus{outline:none;background:#fff;color:#111;opacity:1;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3)}
+.tv .pill a:focus-visible,.tv .pill button:focus-visible{outline:none;background:#fff;color:#111;opacity:1;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3)}
 /* Library: a list on the left, the chosen shelf on the right */
 .lib{display:grid;grid-template-columns:17rem minmax(0,1fr);gap:2.2rem;align-items:start}
 .lib-nav{position:sticky;top:0;display:flex;flex-direction:column;gap:.15rem;max-height:calc(100vh - 8.5rem);overflow-y:auto;scrollbar-width:none;padding:1.4rem 1.8rem;margin:-1.4rem -1.8rem}
@@ -83,7 +84,8 @@ svg.i{width:1.25rem;height:1.25rem;flex:none;display:block}
 .lib-h{font-size:.82rem;font-weight:600;color:var(--fg2);letter-spacing:.06em;text-transform:uppercase;padding:1.1rem 1rem .3rem}
 .lib-pane{min-width:0}
 .lib-pane .h1{font-size:1.6rem}
-.tv .lib-i:focus,.tv .lib-i:focus-visible{outline:none;background:#fff;color:#111;box-shadow:0 .4rem 1.2rem rgba(0,0,0,.25)}
+.tv .lib-i:focus{outline:none;background:#fff;color:#111;box-shadow:0 .4rem 1.2rem rgba(0,0,0,.25)}
+.tv .lib-i:focus-visible{outline:none;background:#fff;color:#111;box-shadow:0 .4rem 1.2rem rgba(0,0,0,.25)}
 .tv .lib-i{transition:background .12s ease}
 .side{
   background:var(--pane);border-right:1px solid var(--line);
@@ -163,7 +165,8 @@ main#view{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:1.8rem 2
 .seek .seek-fill{width:0;background:var(--fill);max-width:100%}
 .seek:focus-within::before,.seek:focus-within .seek-fill,.seek:hover::before,.seek:hover .seek-fill{height:var(--th-on)}
 .seek input{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;outline:none}
-.seek input:focus,.seek input:focus-visible,.tv .seek input:focus,.tv .seek input:focus-visible{outline:none}
+.seek input:focus,.tv .seek input:focus{outline:none}
+.seek input:focus-visible,.tv .seek input:focus-visible{outline:none}
 
 input[type="range"]{
   -webkit-appearance:none;appearance:none;background:transparent;height:1rem;margin:0;width:100%;cursor:pointer;
@@ -272,8 +275,10 @@ a.t:hover,a.s:hover{text-decoration:underline}
 .lead .pl{display:none;width:1rem;height:1rem;color:var(--fg);position:relative;z-index:2}
 .lead.art-on::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.4);opacity:0;transition:opacity .12s}
 .lead.art-on .pl{color:#fff}
-.trk:hover .lead .num,.trk:focus-visible .lead .num{display:none}
-.trk:hover .lead .pl,.trk:focus-visible .lead .pl{display:block}
+.trk:hover .lead .num{display:none}
+.trk:focus-visible .lead .num{display:none}
+.trk:hover .lead .pl{display:block}
+.trk:focus-visible .lead .pl{display:block}
 .trk:hover .lead.art-on::after{opacity:1}
 .tt{display:flex;flex-direction:column;min-width:0}
 .tt b{font-weight:500;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -281,7 +286,8 @@ a.t:hover,a.s:hover{text-decoration:underline}
 .al{color:var(--fg2);font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .du{color:var(--fg2);font-size:.85rem;text-align:right;font-variant-numeric:tabular-nums}
 .trk .ib{width:2rem;height:2rem;color:var(--fg2);opacity:0}
-.trk:hover .ib,.trk .ib:focus-visible,.trk .ib.on{opacity:1}
+.trk:hover .ib,.trk .ib.on{opacity:1}
+.trk .ib:focus-visible{opacity:1}
 .trk .ib.on{color:var(--accent)}
 .trk.cur .tt b{color:var(--accent)}
 .trk.cur .lead .num,.trk.cur .lead .pl{display:none!important}
@@ -358,7 +364,8 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .np-q .qi .qa{width:min(4rem,calc(var(--qh) - 1rem));height:min(4rem,calc(var(--qh) - 1rem))}
 .np-q .qi b{font-size:1.1rem}
 .np-q .qi small{font-size:.95rem}
-.np-q .qi:focus,.np-q .qi:focus-visible,.tv .np-q .qi:focus,.tv .np-q .qi:focus-visible{background:rgba(255,255,255,.2);outline:none;box-shadow:none}
+.np-q .qi:focus,.tv .np-q .qi:focus{background:rgba(255,255,255,.2);outline:none;box-shadow:none}
+.np-q .qi:focus-visible,.tv .np-q .qi:focus-visible{background:rgba(255,255,255,.2);outline:none;box-shadow:none}
 .np-q .qi small{color:rgba(255,255,255,.6)}
 .np-q .qi.cur b{color:#fff;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:.2rem}
 .np-q .qa{background:rgba(255,255,255,.12)}
@@ -442,7 +449,8 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .quit .qbtns button{flex:1;padding:.95rem 1rem;border-radius:.55rem;font-size:1.1rem;font-weight:600;color:var(--fg);background:var(--sel);border:0;
   transition:background .15s ease,transform .15s ease,box-shadow .15s ease}
 .quit .qbtns button:hover{background:var(--hover)}
-.quit .qbtns button:focus,.quit .qbtns button:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.08)}
+.quit .qbtns button:focus{outline:none;background:#fff;color:#111;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.08)}
+.quit .qbtns button:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.08)}
 .seg{display:flex;background:var(--sel);border-radius:.6rem;padding:2px}
 .seg button{flex:1;padding:.4rem .5rem;border-radius:.5rem;font-size:.9rem}
 .seg button.on{background:var(--bg);box-shadow:var(--shadow);font-weight:600}
@@ -461,16 +469,22 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .tv .only-m{display:flex!important}
 .tv .pbtn{display:none}
 .tv .card .t{margin-top:.85rem}
-.tv :focus-visible,.tv :focus{outline:.2rem solid var(--accent);outline-offset:.2rem}
+.tv :focus{outline:.2rem solid var(--accent);outline-offset:.2rem}
+.tv :focus-visible{outline:.2rem solid var(--accent);outline-offset:.2rem}
 .tv .art{transition:transform .12s ease-out}
-.tv .art:focus,.tv .art:focus-visible{outline:none;transform:scale(1.06);z-index:2;box-shadow:0 0 0 .2rem var(--bg),0 0 0 .42rem var(--accent)}
+.tv .art:focus{outline:none;transform:scale(1.06);z-index:2;box-shadow:0 0 0 .2rem var(--bg),0 0 0 .42rem var(--accent)}
+.tv .art:focus-visible{outline:none;transform:scale(1.06);z-index:2;box-shadow:0 0 0 .2rem var(--bg),0 0 0 .42rem var(--accent)}
 .tv .side a:focus,.tv .side .nav button:focus,.tv .side .nav-btn:focus{outline:none;background:var(--accent);color:#fff}
 .tv .side a:focus svg.i,.tv .side .nav button:focus svg.i,.tv .side .nav-btn:focus svg.i{color:#fff}
-.tv .trk:focus,.tv .trk:focus-visible{background:var(--sel);outline-offset:-.2rem}
-/* Full-screen player: focus is a soft white rounded square, like the Up next rows. */
-.tv .np .ib:focus,.tv .np .ib:focus-visible,.tv .np .np-close:focus,.tv .np .np-close:focus-visible,.tv .np .btn-t:focus,.tv .np .btn-t:focus-visible{
+.tv .trk:focus{background:var(--sel);outline-offset:-.2rem}
+.tv .trk:focus-visible{background:var(--sel);outline-offset:-.2rem}
+/* Full-screen player: focus is a soft white rounded square,like the Up next rows. */
+.tv .np .ib:focus,.tv .np .np-close:focus,.tv .np .btn-t:focus{
   outline:none;box-shadow:none;background:rgba(255,255,255,.22);border-radius:1rem}
-.tv .np .btn-t:focus,.tv .np .btn-t:focus-visible{border-radius:.7rem}
+.tv .np .ib:focus-visible,.tv .np .np-close:focus-visible,.tv .np .btn-t:focus-visible{
+  outline:none;box-shadow:none;background:rgba(255,255,255,.22);border-radius:1rem}
+.tv .np .btn-t:focus{border-radius:.7rem}
+.tv .np .btn-t:focus-visible{border-radius:.7rem}
 .tv .np .ib,.tv .np .btn-t{transition:background .15s ease}
 .tv .trk .ib{opacity:1}
 
@@ -498,16 +512,22 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 #view .trk{padding:.75rem 1rem;border-radius:.7rem}
 #view .trk .tt b{font-size:1.08rem}
 #view .trk .du{font-size:1rem}
-#view :focus,#view :focus-visible,.tv #view :focus,.tv #view :focus-visible{outline:none}
-#view .btn:focus-visible,.tv #view .btn:focus,#view .by:focus-visible,.tv #view .by:focus,#view select.sel:focus-visible,.tv #view select.sel:focus,
-#view .search input:focus-visible,.tv #view .search input:focus{background:#fff;color:#111;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3);z-index:2;position:relative}
-#view .trk:focus-visible,.tv #view .trk:focus{background:#fff!important;color:#111;transform:scale(1.025);box-shadow:0 .5rem 1.6rem rgba(0,0,0,.28);z-index:2;position:relative}
-#view .trk:focus-visible .tt small,#view .trk:focus-visible .du,#view .trk:focus-visible .al,#view .trk:focus-visible .lead,#view .trk:focus-visible .num,#view .trk:focus-visible .ib,#view .trk:focus-visible .pl,
+#view :focus,.tv #view :focus{outline:none}
+#view :focus-visible,.tv #view :focus-visible{outline:none}
+.tv #view .btn:focus,.tv #view .by:focus,.tv #view select.sel:focus,.tv #view .search input:focus{background:#fff;color:#111;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3);z-index:2;position:relative}
+#view .btn:focus-visible,#view .by:focus-visible,#view select.sel:focus-visible,#view .search input:focus-visible{background:#fff;color:#111;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3);z-index:2;position:relative}
+.tv #view .trk:focus{background:#fff!important;color:#111;transform:scale(1.025);box-shadow:0 .5rem 1.6rem rgba(0,0,0,.28);z-index:2;position:relative}
+#view .trk:focus-visible{background:#fff!important;color:#111;transform:scale(1.025);box-shadow:0 .5rem 1.6rem rgba(0,0,0,.28);z-index:2;position:relative}
 .tv #view .trk:focus .tt small,.tv #view .trk:focus .du,.tv #view .trk:focus .al,.tv #view .trk:focus .lead,.tv #view .trk:focus .num,.tv #view .trk:focus .ib,.tv #view .trk:focus .pl{color:#555}
-#view .trk:focus-visible .ib.on,.tv #view .trk:focus .ib.on{color:var(--accent)}
-#view .trk .ib:focus-visible,.tv #view .trk .ib:focus{background:rgba(0,0,0,.1);color:#111;border-radius:.6rem;transform:none;box-shadow:none}
-#view .bio:focus-visible,.tv #view .bio:focus{background:#fff;color:#111;transform:scale(1.02);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.28)}
-#view .card .art:focus,#view .card .art:focus-visible,.tv #view .card .art:focus,.tv #view .card .art:focus-visible{transform:scale(1.07);box-shadow:0 .5rem 1.3rem rgba(0,0,0,.4);z-index:2}
+#view .trk:focus-visible .tt small,#view .trk:focus-visible .du,#view .trk:focus-visible .al,#view .trk:focus-visible .lead,#view .trk:focus-visible .num,#view .trk:focus-visible .ib,#view .trk:focus-visible .pl{color:#555}
+.tv #view .trk:focus .ib.on{color:var(--accent)}
+#view .trk:focus-visible .ib.on{color:var(--accent)}
+.tv #view .trk .ib:focus{background:rgba(0,0,0,.1);color:#111;border-radius:.6rem;transform:none;box-shadow:none}
+#view .trk .ib:focus-visible{background:rgba(0,0,0,.1);color:#111;border-radius:.6rem;transform:none;box-shadow:none}
+.tv #view .bio:focus{background:#fff;color:#111;transform:scale(1.02);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.28)}
+#view .bio:focus-visible{background:#fff;color:#111;transform:scale(1.02);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.28)}
+#view .card .art:focus,.tv #view .card .art:focus{transform:scale(1.07);box-shadow:0 .5rem 1.3rem rgba(0,0,0,.4);z-index:2}
+#view .card .art:focus-visible,.tv #view .card .art:focus-visible{transform:scale(1.07);box-shadow:0 .5rem 1.3rem rgba(0,0,0,.4);z-index:2}
 /* ---------- on-screen keyboard, recent searches, browse categories ---------- */
 .osk{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem .2rem;margin:1.1rem 0 0;padding:.6rem .5rem 1.1rem;border-bottom:1px solid var(--line)}
 .osk button{min-width:2.2rem;height:2.7rem;padding:0 .2rem;border-radius:.55rem;font-size:1.55rem;font-weight:500;color:var(--fg2);background:transparent;
@@ -516,7 +536,8 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .osk button.fn.on{background:var(--fg);color:var(--bg)}
 .osk button svg.i{width:1.5rem;height:1.5rem}
 .osk button:hover{background:var(--hover)}
-.osk button:focus,.osk button:focus-visible,.tv .osk button:focus{outline:none;background:#fff;color:#111;transform:scale(1.28);box-shadow:0 .4rem 1.1rem rgba(0,0,0,.35);z-index:3;position:relative}
+.osk button:focus,.tv .osk button:focus{outline:none;background:#fff;color:#111;transform:scale(1.28);box-shadow:0 .4rem 1.1rem rgba(0,0,0,.35);z-index:3;position:relative}
+.osk button:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.28);box-shadow:0 .4rem 1.1rem rgba(0,0,0,.35);z-index:3;position:relative}
 .osk-hint{display:none;text-align:center;color:var(--fg2);font-size:.85rem;margin:.5rem 0 0}
 .has-pad .osk-hint{display:block}
 .osk-field{box-shadow:0 0 0 .18rem var(--fg2)}
@@ -539,9 +560,12 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .tile{position:relative;display:flex;align-items:flex-end;height:8.6rem;border-radius:.8rem;padding:.9rem 1rem;color:#fff;font-size:1.35rem;font-weight:700;overflow:hidden;
   text-shadow:0 1px 6px rgba(0,0,0,.3);transition:transform .15s ease,box-shadow .15s ease}
 .tile::after{content:"";position:absolute;right:-1.4rem;top:-1.4rem;width:6.5rem;height:6.5rem;border-radius:50%;background:rgba(255,255,255,.16)}
-#view .rc:focus-visible,.tv #view .rc:focus{background:#fff;color:#111;transform:scale(1.05);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3);z-index:2;position:relative}
-#view .rc:focus-visible small,.tv #view .rc:focus small{color:#555}
-#view .tile:focus-visible,.tv #view .tile:focus{transform:scale(1.06);box-shadow:0 .6rem 1.6rem rgba(0,0,0,.4);z-index:2}
+.tv #view .rc:focus{background:#fff;color:#111;transform:scale(1.05);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3);z-index:2;position:relative}
+#view .rc:focus-visible{background:#fff;color:#111;transform:scale(1.05);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3);z-index:2;position:relative}
+.tv #view .rc:focus small{color:#555}
+#view .rc:focus-visible small{color:#555}
+.tv #view .tile:focus{transform:scale(1.06);box-shadow:0 .6rem 1.6rem rgba(0,0,0,.4);z-index:2}
+#view .tile:focus-visible{transform:scale(1.06);box-shadow:0 .6rem 1.6rem rgba(0,0,0,.4);z-index:2}
 /* Hovering with a mouse (the computer's, or the TV remote's pointer) pops items the same way the arrow keys do; the keys hide the pointer, which also ends the hover pop */
 html:not(.nomouse) #view .card .art:hover{transform:scale(1.07);box-shadow:0 .5rem 1.3rem rgba(0,0,0,.4);z-index:2}
 html:not(.nomouse) #view .trk:hover{background:#fff!important;color:#111;transform:scale(1.025);box-shadow:0 .5rem 1.6rem rgba(0,0,0,.28);z-index:2;position:relative}
@@ -564,7 +588,8 @@ html:not(.nomouse) .lib-i:hover{background:#fff;color:#111;box-shadow:0 .4rem 1.
 .ddmenu button.on::before{content:"";width:.8rem;height:.45rem;border-left:.18rem solid currentColor;border-bottom:.18rem solid currentColor;transform:rotate(-45deg) translateY(-.12rem);flex:none}
 .ddmenu button:not(.on){padding-left:2.2rem}
 .ddmenu button:hover{background:var(--hover)}
-#view .ddbtn:focus,#view .ddbtn:focus-visible,.tv #view .ddbtn:focus,.ddmenu button:focus,.ddmenu button:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.04);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3);position:relative;z-index:2}
+#view .ddbtn:focus,.tv #view .ddbtn:focus,.ddmenu button:focus{outline:none;background:#fff;color:#111;transform:scale(1.04);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3);position:relative;z-index:2}
+#view .ddbtn:focus-visible,.ddmenu button:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.04);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3);position:relative;z-index:2}
 /* settings: same surface as the quit prompt, with large choice buttons */
 .set .panel{width:min(46rem,100%);gap:1.3rem;padding:2rem 2.2rem 1.8rem}
 .set .srow{display:flex;flex-direction:column;gap:.7rem}
@@ -579,14 +604,16 @@ html:not(.nomouse) .lib-i:hover{background:#fff;color:#111;box-shadow:0 .4rem 1.
 .set .chips button.on b::before{content:"";width:.9rem;height:.5rem;border-left:.2rem solid currentColor;border-bottom:.2rem solid currentColor;transform:rotate(-45deg) translateY(-.15rem);flex:none;margin-right:.1rem}
 .set .chips button:hover{background:var(--line2)}
 .set .chips button.on:hover{background:var(--fg)}
-.set .chips button:focus,.set .chips button:focus-visible,.tv .set .chips button:focus{outline:none;background:#fff;color:#111;transform:scale(1.05);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.08);position:relative;z-index:2}
+.set .chips button:focus,.tv .set .chips button:focus{outline:none;background:#fff;color:#111;transform:scale(1.05);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.08);position:relative;z-index:2}
+.set .chips button:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.05);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.08);position:relative;z-index:2}
 .set .chips button:focus small{color:#555}
 .sethead{display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .set .kbtn{display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1.2rem;border-radius:.6rem;background:#111;color:#fff;font-size:1rem;font-weight:650;border:1px solid rgba(255,255,255,.14);
   transition:background .15s ease,color .15s ease,transform .15s ease,box-shadow .15s ease}
 .set .kbtn svg.i{width:1.3rem;height:1.3rem}
 .set .kbtn:hover{background:#2a2a2d}
-.set .kbtn:focus,.set .kbtn:focus-visible,.tv .set .kbtn:focus{outline:none;background:#fff;color:#111;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.08);position:relative;z-index:2;border-color:transparent}
+.set .kbtn:focus,.tv .set .kbtn:focus{outline:none;background:#fff;color:#111;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.08);position:relative;z-index:2;border-color:transparent}
+.set .kbtn:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.07);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.08);position:relative;z-index:2;border-color:transparent}
 #keys.overlay{z-index:70}   /* above Settings, which it opens from */
 #keys{z-index:70}
 #quit{z-index:80}
@@ -640,7 +667,8 @@ kbd{display:inline-flex;align-items:center;justify-content:center;min-width:2rem
 .tv .login .panel .logo{width:2.6rem;height:2.6rem}
 .tv .login .panel input:focus{outline:none;background:var(--sel);box-shadow:0 0 0 .18rem var(--fg)}
 .tv .login .panel input.osk-field{box-shadow:0 0 0 .18rem var(--fg2)}
-.tv .login .panel .btn:focus,.tv .login .panel .btn:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.05);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3)}
+.tv .login .panel .btn:focus{outline:none;background:#fff;color:#111;transform:scale(1.05);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3)}
+.tv .login .panel .btn:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.05);box-shadow:0 .5rem 1.4rem rgba(0,0,0,.3)}
 .tv .login .panel .btn{transition:background .15s ease,transform .15s ease,box-shadow .15s ease;background:var(--sel);color:var(--fg)}
 /* ---------- small screens ---------- */
 @media (max-width:760px){
@@ -1342,7 +1370,8 @@ let skipB = skipOk(store.get('cadence.skipb', 10)), skipF = skipOk(store.get('ca
 
 const base = () => proxyMode ? '' : ((cfg && cfg.server) || '').replace(/\/+$/, '');
 function qs(params, c = cfg) {
-  const p = new URLSearchParams({ u: c.user, t: c.token, s: c.salt, v: '1.16.1', c: 'Couchtunes', f: 'json' });
+  const p = new URLSearchParams();   // filled with append(): old TVs (Chromium 53) turn an object passed to the constructor into "[object Object]"
+  [['u', c.user], ['t', c.token], ['s', c.salt], ['v', '1.16.1'], ['c', 'Couchtunes'], ['f', 'json']].forEach(kv => p.append(kv[0], kv[1]));
   for (const k in params) {
     const v = params[k];
     if (v == null) continue;
@@ -2787,7 +2816,7 @@ window.addEventListener('resize', () => { fitPanel($('#settings')); fitPanel($('
 /* Which controller is plugged in? Only read when a pad connects and when the Shortcuts window opens, so it costs nothing while playing. */
 let padKind = 'xbox';
 function detectPad() {
-  try { for (const g of (navigator.getGamepads ? navigator.getGamepads() : [])) if (g && g.connected) { padKind = /054c|playstation|dualshock|dualsense|ps[345]|wireless controller/i.test(g.id) ? 'ps' : 'xbox'; break; } } catch (e) {}
+  try { for (const g of Array.prototype.slice.call(navigator.getGamepads ? navigator.getGamepads() : [])) if (g && g.connected) { padKind = /054c|playstation|dualshock|dualsense|ps[345]|wireless controller/i.test(g.id) ? 'ps' : 'xbox'; break; } } catch (e) {}
   const pn = $('#kp-pad'); if (pn) { pn.classList.toggle('ps', padKind === 'ps'); if (!$('#keys').hidden) fitPanel($('#keys')); }
 }
 window.addEventListener('gamepadconnected', detectPad);
@@ -3006,7 +3035,7 @@ window.addEventListener('keyup', e => {
   };
   const pulse = (name, down, fn, repeat) => { if (down) { if (press(name, 0, repeat)) fn(); } else release(name); };
   function tick() {
-    const pads = navigator.getGamepads() || [];
+    const pads = Array.prototype.slice.call(navigator.getGamepads() || []);   // old TVs return a list object without array methods
     for (const g of pads) {
       if (!g || !g.connected) continue;
       const b = i => !!(g.buttons[i] && g.buttons[i].pressed);
@@ -3035,7 +3064,7 @@ window.addEventListener('keyup', e => {
   let running = false;
   const go2 = () => { document.documentElement.classList.add('has-pad'); if (!running) { running = true; requestAnimationFrame(tick); } };
   window.addEventListener('gamepadconnected', go2);
-  if ((navigator.getGamepads() || []).some(Boolean)) go2();
+  if (Array.prototype.some.call(navigator.getGamepads() || [], Boolean)) go2();
 })();
 
 /* ---------- start ---------- */
