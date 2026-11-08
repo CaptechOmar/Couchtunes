@@ -2246,6 +2246,20 @@ function renderOsk(refocus) {
     const k = refocus || had; if (k != null) { const b = $$('button', o).find(x => x.dataset.osk === k); if (b) b.focus({ preventScroll: true }); }
   });
 }
+function pasteInto(t) {
+  if (!t || !navigator.clipboard || !navigator.clipboard.readText) { toast('Paste is not available here'); return; }
+  navigator.clipboard.readText().then(txt => {
+    txt = String(txt || '').replace(/[\r\n]+/g, ' ');
+    if (txt) oskInput(t, t.value + txt);
+  }).catch(() => toast('Could not read the clipboard'));
+}
+// Pasting from a context menu or a paste button arrives as a paste event
+document.addEventListener('paste', e => {
+  const a = document.activeElement;
+  if (!TV || !a || !a.matches || !a.matches('#q2,#login-form input')) return;
+  const txt = ((e.clipboardData && e.clipboardData.getData('text')) || '').replace(/[\r\n]+/g, ' ');
+  e.preventDefault(); if (txt) oskInput(a, a.value + txt);
+}, true);
 function oskInput(t, v) { t.value = v; t.dispatchEvent(new Event('input', { bubbles: true })); }
 function oskPress(k, pad) {   // pad: pressed with a controller shortcut, so the focus stays where it is
   if (k === 'mode') { oskMode = oskMode === 'abc' ? 'num' : 'abc'; oskCaps = false; renderOsk(pad ? undefined : 'mode'); return; }
@@ -2914,6 +2928,12 @@ function onKeyDown(e) {
   if (e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
     const hit = k === 32 ? toggle : k === 37 ? prev : k === 39 ? () => next(false) : k === 13 ? toggleNP : null;
     if (hit) { hit(); e.preventDefault(); e.stopPropagation(); return; }
+  }
+  // Paste (Ctrl+V, Shift+Insert) into the sign-in and search fields. They are read-only in the TV layout (typing goes through the on-screen keyboard), so the browser would ignore a paste.
+  if (TV && a && a.closest && (a.closest('.osk') || (a.matches && a.matches('#q2,#login-form input'))) && !e.altKey && !e.metaKey
+      && ((e.ctrlKey && !e.shiftKey && k === 86) || (e.shiftKey && !e.ctrlKey && k === 45))) {
+    e.preventDefault(); e.stopPropagation();
+    pasteInto(oskTarget()); return;
   }
   // Colored buttons on the TV remote: red Now Playing, green play / pause, yellow previous, blue next. They work everywhere, even while typing.
   if (TV && k >= 403 && k <= 406 && !e.ctrlKey && !e.metaKey && !e.altKey && $('#quit').hidden) {
