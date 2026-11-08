@@ -29,16 +29,20 @@ function create() {
     webPreferences: { backgroundThrottling: false, spellcheck: false }
   });
   Menu.setApplicationMenu(null);
-  // Go full screen once the window exists. Asking for it at creation left the picture short of the screen edges
-  // under Wayland (the Flatpak build), so we also check the size afterwards and redo it if it came out wrong.
+  // Go full screen only after the window has been shown as a normal window and the desktop has sized it.
+  // Asking for it straight away left the picture short of the screen edges under Wayland (the Flatpak build).
+  // Pressing F11 twice by hand worked, so we do what that does: show it first, then go full screen.
   win.once('ready-to-show', () => {
-    win.show(); win.setFullScreen(true);
-    setTimeout(async () => {
-      try {
-        const bad = await win.webContents.executeJavaScript('Math.abs(innerWidth - screen.width) > 2 || Math.abs(innerHeight - screen.height) > 2');
-        if (bad && win.isFullScreen()) { win.setFullScreen(false); setTimeout(() => win.setFullScreen(true), 400); }
-      } catch (e) {}
-    }, 1200);
+    win.show();
+    setTimeout(() => {
+      win.setFullScreen(true);
+      setTimeout(async () => {   // still the wrong size? do it once more
+        try {
+          const bad = await win.webContents.executeJavaScript('Math.abs(innerWidth - screen.width) > 2 || Math.abs(innerHeight - screen.height) > 2');
+          if (bad && win.isFullScreen()) { win.setFullScreen(false); setTimeout(() => win.setFullScreen(true), 500); }
+        } catch (e) {}
+      }, 1200);
+    }, 600);
   });
   // ?tv turns on the 10-foot layout, focus navigation and game controller support
   win.loadFile(path.join(__dirname, 'app', 'index.html'), { query: { tv: '1' } });
