@@ -1,6 +1,15 @@
 const { app, BrowserWindow, Menu, session, globalShortcut } = require('electron');
 const path = require('path');
 
+// Linux: use the desktop's mouse cursor theme and size. Through XWayland the app would otherwise fall back to a small default cursor.
+if (process.platform === 'linux') {
+  try {
+    const { execFileSync } = require('child_process');
+    const gs = k => execFileSync('gsettings', ['get', 'org.gnome.desktop.interface', k], { timeout: 800, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim().replace(/^'|'$/g, '');
+    if (!process.env.XCURSOR_THEME) { const t = gs('cursor-theme'); if (t) process.env.XCURSOR_THEME = t; }
+    if (!process.env.XCURSOR_SIZE) { const z = parseInt(gs('cursor-size'), 10); if (z > 0) process.env.XCURSOR_SIZE = String(z); }
+  } catch (e) {}   // no gsettings here (another desktop, or inside the Flatpak, where couchtunes.sh does this)
+}
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 app.commandLine.appendSwitch('enable-features', 'GamepadButtonAxisEvents');
 

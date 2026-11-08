@@ -17,6 +17,8 @@ finish-args:
   - --socket=wayland
   - --socket=pulseaudio
   - --device=dri
+  - --filesystem=xdg-data/icons:ro   # your mouse cursor theme
+  - --filesystem=~/.icons:ro
   - --device=all             # game controllers (/dev/input)
   - --own-name=org.mpris.MediaPlayer2.chromium.*   # media keys and desktop media controls
 
