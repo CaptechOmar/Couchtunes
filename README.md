@@ -69,6 +69,7 @@ Download the latest files from the [Releases](../../releases) page.
 | **LG webOS (Homebrew Channel)** | repository link | In Homebrew Channel: Settings, Add repository, then paste `https://captechomar.github.io/Couchtunes/apps.json` |
 | **Linux (any)** | `Couchtunes-*-linux-x86_64.AppImage` | `chmod +x` it and run it. It carries update information, so [Gear Lever](https://flathub.org/apps/it.mijorus.gearlever) (or AppImageUpdate) can update it for you |
 | **Linux (Flatpak)** | [`couchtunes.flatpakref`](https://captechomar.github.io/Couchtunes/flatpak/couchtunes.flatpakref) | `flatpak install --user https://captechomar.github.io/Couchtunes/flatpak/couchtunes.flatpakref`. After that, updates come with `flatpak update` or your software center. |
+| Linux (Flatpak beta) | [`couchtunes-beta.flatpakref`](https://captechomar.github.io/Couchtunes/flatpak/couchtunes-beta.flatpakref) | `flatpak install --user https://captechomar.github.io/Couchtunes/flatpak/couchtunes-beta.flatpakref`. Gets the pre-releases. Start it with `flatpak run io.github.captechomar.Couchtunes//beta`. |
 | Linux (Flatpak file) | `Couchtunes.flatpak` | `flatpak install --user ./Couchtunes.flatpak` (no automatic updates) |
 | **Windows** | `Couchtunes-*-windows-portable.exe` | Run it. No installer, and nothing is written outside its own settings folder |
 | **Any browser** | `src/index.html` | Open it, or add `?tv` for the TV layout. The server must allow cross-origin requests |
