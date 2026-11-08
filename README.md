@@ -15,8 +15,10 @@ Couchtunes talks to any Subsonic or OpenSubsonic server and is designed to be dr
 ## Screenshots
 ### Listen Now
 ![Listen Now](docs/screenshots/listen-now.png)
+### Now Playing
+![Now playing](docs/screenshots/now-playing.png)
 ### Lyrics
-![Listen Now](docs/screenshots/lyrics.png)
+![Lyrics](docs/screenshots/lyrics.png)
 ### Library: Albums
 ![Library albums](docs/screenshots/library-albums.png)
 ### Library: Artists
