@@ -1,23 +1,6 @@
 const { app, BrowserWindow, Menu, session, globalShortcut } = require('electron');
 const path = require('path');
 
-// Linux: use the desktop's mouse cursor theme and size. Through XWayland the app would otherwise fall back to a small default cursor.
-if (process.platform === 'linux') {
-  try {
-    const { execFileSync } = require('child_process');
-    const gs = k => execFileSync('gsettings', ['get', 'org.gnome.desktop.interface', k], { timeout: 800, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim().replace(/^'|'$/g, '');
-    if (!process.env.XCURSOR_THEME) { const t = gs('cursor-theme'); if (t) process.env.XCURSOR_THEME = t; }
-    if (!process.env.XCURSOR_SIZE) { const z = parseInt(gs('cursor-size'), 10); if (z > 0) process.env.XCURSOR_SIZE = String(z); }
-  } catch (e) {}   // no gsettings here (another desktop, or inside the Flatpak, where couchtunes.sh does this)
-}
-// Linux: run natively on Wayland when the desktop uses it (sharp picture and the right cursor size on scaled screens, which XWayland gets wrong).
-// Chromium picks its display backend before any script runs, so the flag has to be on the command line: start again once with it.
-// Off by default for now (the AppImage did not start for some people): set COUCHTUNES_WAYLAND=1 to try it.
-if (process.platform === 'linux' && process.env.XDG_SESSION_TYPE === 'wayland' && process.env.COUCHTUNES_WAYLAND
-    && !process.argv.some(a => a.startsWith('--ozone-platform'))) {
-  app.relaunch({ execPath: process.env.APPIMAGE || process.execPath, args: process.argv.slice(1).concat('--ozone-platform-hint=auto') });
-  app.exit(0);
-}
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 app.commandLine.appendSwitch('enable-features', 'GamepadButtonAxisEvents');
 
@@ -32,19 +15,11 @@ function create() {
     cb({ responseHeaders: h });
   });
   const win = new BrowserWindow({
-    width: 1280, height: 720, fullscreen: true, frame: !process.env.COUCHTUNES_FRAMELESS, minWidth: 640, minHeight: 400, backgroundColor: '#111111', title: 'Couchtunes',
+    width: 1280, height: 720, fullscreen: true, minWidth: 640, minHeight: 400, backgroundColor: '#111111', title: 'Couchtunes',
     autoHideMenuBar: true, icon: path.join(__dirname, 'icon.png'),
     webPreferences: { backgroundThrottling: false, spellcheck: false }
   });
   Menu.setApplicationMenu(null);
-  // Experiments for the fullscreen gap on GNOME / Wayland. Set COUCHTUNES_TRY to one of: toggle, zoom, hide, kiosk
-  const TRY = process.env.COUCHTUNES_TRY || '';
-  win.once('ready-to-show', () => {
-    if (TRY === 'toggle') { win.setFullScreen(false); win.setFullScreen(true); }
-    if (TRY === 'kiosk') win.setKiosk(true);
-    if (TRY === 'zoom') setTimeout(() => { win.webContents.setZoomFactor(1.001); setTimeout(() => win.webContents.setZoomFactor(1), 150); }, 800);
-    if (TRY === 'hide') setTimeout(() => { win.hide(); win.show(); }, 800);
-  });
   if (process.env.COUCHTUNES_DEBUG) {   // prints the window and screen sizes, to help find fullscreen problems
     for (const t of [500, 1500, 3000, 6000]) setTimeout(async () => {
       const d = require('electron').screen.getPrimaryDisplay();
