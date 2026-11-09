@@ -12,8 +12,8 @@ if (process.platform === 'linux') {
 }
 // Linux: run natively on Wayland when the desktop uses it (sharp picture and the right cursor size on scaled screens, which XWayland gets wrong).
 // Chromium picks its display backend before any script runs, so the flag has to be on the command line: start again once with it.
-// Set COUCHTUNES_X11=1 to use X11 / XWayland instead.
-if (process.platform === 'linux' && process.env.XDG_SESSION_TYPE === 'wayland' && !process.env.COUCHTUNES_X11
+// Off by default for now (the AppImage did not start for some people): set COUCHTUNES_WAYLAND=1 to try it.
+if (process.platform === 'linux' && process.env.XDG_SESSION_TYPE === 'wayland' && process.env.COUCHTUNES_WAYLAND
     && !process.argv.some(a => a.startsWith('--ozone-platform'))) {
   app.relaunch({ execPath: process.env.APPIMAGE || process.execPath, args: process.argv.slice(1).concat('--ozone-platform-hint=auto') });
   app.exit(0);
@@ -32,11 +32,19 @@ function create() {
     cb({ responseHeaders: h });
   });
   const win = new BrowserWindow({
-    width: 1280, height: 720, fullscreen: true, minWidth: 640, minHeight: 400, backgroundColor: '#111111', title: 'Couchtunes',
+    width: 1280, height: 720, fullscreen: true, frame: !process.env.COUCHTUNES_FRAMELESS, minWidth: 640, minHeight: 400, backgroundColor: '#111111', title: 'Couchtunes',
     autoHideMenuBar: true, icon: path.join(__dirname, 'icon.png'),
     webPreferences: { backgroundThrottling: false, spellcheck: false }
   });
   Menu.setApplicationMenu(null);
+  // Experiments for the fullscreen gap on GNOME / Wayland. Set COUCHTUNES_TRY to one of: toggle, zoom, hide, kiosk
+  const TRY = process.env.COUCHTUNES_TRY || '';
+  win.once('ready-to-show', () => {
+    if (TRY === 'toggle') { win.setFullScreen(false); win.setFullScreen(true); }
+    if (TRY === 'kiosk') win.setKiosk(true);
+    if (TRY === 'zoom') setTimeout(() => { win.webContents.setZoomFactor(1.001); setTimeout(() => win.webContents.setZoomFactor(1), 150); }, 800);
+    if (TRY === 'hide') setTimeout(() => { win.hide(); win.show(); }, 800);
+  });
   if (process.env.COUCHTUNES_DEBUG) {   // prints the window and screen sizes, to help find fullscreen problems
     for (const t of [500, 1500, 3000, 6000]) setTimeout(async () => {
       const d = require('electron').screen.getPrimaryDisplay();
