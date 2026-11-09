@@ -20,6 +20,7 @@ finish-args:
   - --filesystem=xdg-data/icons:ro   # your mouse cursor theme
   - --filesystem=~/.icons:ro
   - --device=all             # game controllers (/dev/input)
+  - --filesystem=/run/udev:ro   # lets Chromium find game controllers (the same setting Steam's Flatpak uses)
   - --own-name=org.mpris.MediaPlayer2.chromium.*   # media keys and desktop media controls
 
 modules:
