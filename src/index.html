@@ -2104,6 +2104,20 @@ async function viewLibrary(my, cat, arg) {
 }
 
 /* ----- Artist ----- */
+let artistAlbums = [], artistBusy = false;
+// Shuffle everything by this artist: load the songs of every album (a few at a time), then play them in random order.
+async function artistShuffle() {
+  if (artistBusy || !artistAlbums.length) return;
+  artistBusy = true; toast('Shuffling…');
+  try {
+    const ids = artistAlbums.slice(), songs = [];
+    for (let i = 0; i < ids.length; i += 4) {
+      const parts = await Promise.all(ids.slice(i, i + 4).map(id => api('getAlbum', { id }).then(r => (r.album && r.album.song) || []).catch(() => [])));
+      parts.forEach(p => songs.push.apply(songs, p));
+    }
+    if (songs.length) playList(songs, 0, true); else toast('No songs found for this artist');
+  } finally { artistBusy = false; }
+}
 async function viewArtist(my, id) {
   loading();
   const r = await api('getArtist', { id });
@@ -2115,12 +2129,16 @@ async function viewArtist(my, id) {
   if (!alive(my)) return;
   let bio = info && info.artistInfo2 && info.artistInfo2.biography || '';
   bio = bio.replace(/<a [^>]*>.*?<\/a>/gi, '').replace(/<[^>]+>/g, '').trim();
-  const albums = (a.album || []).slice().sort((x, y) => (y.year || 0) - (x.year || 0));
+  // Oldest first, like Navidrome. Albums of the same year go by their full release date when the server has one, then by name (Vol. 2 before Vol. 10).
+  const dateKey = x => { const d = x.originalReleaseDate || x.releaseDate || {}; return (x.year || d.year || 9999) * 10000 + (d.month || 0) * 100 + (d.day || 0); };
+  const albums = (a.album || []).slice().sort((x, y) => (dateKey(x) - dateKey(y)) || String(x.name || '').localeCompare(String(y.name || ''), undefined, { numeric: true, sensitivity: 'base' }));
+  artistAlbums = albums.map(x => x.id);
   const topSongs = (top && top.topSongs && top.topSongs.song) || [];
   view.innerHTML = `
     <div class="alb alb-top"><div class="hero round"><div class="art">${ph}${coverImg(a.coverArt || a.id, 400)}</div>
       <div class="hero-info"><h1 class="h1">${esc(a.name)}</h1>
         <p class="meta">${plural(albums.length, 'album')}</p>
+        ${albums.length ? `<div class="actions"><button class="btn primary" data-act="artist-shuffle"><svg class="i"><use href="#i-shuffle"/></svg>Shuffle</button></div>` : ''}
         ${bio ? `<p class="bio" data-act="bio" tabindex="0" role="button">${esc(bio)}</p>` : ''}
       </div></div>
     ${topSongs.length ? `<h2 class="h2">Top songs</h2>${songList('top', topSongs, { art: true, album: true, numbers: false, artist: false })}` : ''}
@@ -2527,6 +2545,7 @@ document.addEventListener('click', e => {
     case 'np-close': setNP(false); break;
     case 'play-album': playAlbumById(t.dataset.id); break;
     case 'radio-play': playRadio(+t.dataset.i); break;
+    case 'artist-shuffle': artistShuffle(); break;
     case 'play-list': { const L = LISTS[t.dataset.list]; if (L) playList(L, 0); break; }
     case 'shuffle-list': { const L = LISTS[t.dataset.list]; if (L) playList(L, 0, true); break; }
     case 'queue-add': { const L = LISTS[t.dataset.list]; if (L) addToQueue(L[+t.dataset.i]); break; }
