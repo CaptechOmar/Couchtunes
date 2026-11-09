@@ -11,8 +11,13 @@ if (process.platform === 'linux') {
   } catch (e) {}   // no gsettings here (another desktop, or inside the Flatpak, where couchtunes.sh does this)
 }
 // Linux: run natively on Wayland when the desktop uses it (sharp picture and the right cursor size on scaled screens, which XWayland gets wrong).
+// Chromium picks its display backend before any script runs, so the flag has to be on the command line: start again once with it.
 // Set COUCHTUNES_X11=1 to use X11 / XWayland instead.
-if (process.platform === 'linux' && !process.env.COUCHTUNES_X11) app.commandLine.appendSwitch('ozone-platform-hint', 'auto');
+if (process.platform === 'linux' && process.env.XDG_SESSION_TYPE === 'wayland' && !process.env.COUCHTUNES_X11
+    && !process.argv.some(a => a.startsWith('--ozone-platform'))) {
+  app.relaunch({ execPath: process.env.APPIMAGE || process.execPath, args: process.argv.slice(1).concat('--ozone-platform-hint=auto') });
+  app.exit(0);
+}
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 app.commandLine.appendSwitch('enable-features', 'GamepadButtonAxisEvents');
 
@@ -27,26 +32,19 @@ function create() {
     cb({ responseHeaders: h });
   });
   const win = new BrowserWindow({
-    width: 1280, height: 720, show: false, minWidth: 640, minHeight: 400, backgroundColor: '#111111', title: 'Couchtunes',
+    width: 1280, height: 720, fullscreen: true, minWidth: 640, minHeight: 400, backgroundColor: '#111111', title: 'Couchtunes',
     autoHideMenuBar: true, icon: path.join(__dirname, 'icon.png'),
     webPreferences: { backgroundThrottling: false, spellcheck: false }
   });
   Menu.setApplicationMenu(null);
-  // Go full screen only after the window has been shown as a normal window and the desktop has sized it.
-  // Asking for it straight away left the picture short of the screen edges under Wayland (the Flatpak build).
-  // Pressing F11 twice by hand worked, so we do what that does: show it first, then go full screen.
-  win.once('ready-to-show', () => {
-    win.show();
-    setTimeout(() => {
-      win.setFullScreen(true);
-      setTimeout(async () => {   // still the wrong size? do it once more
-        try {
-          const bad = await win.webContents.executeJavaScript('Math.abs(innerWidth - screen.width) > 2 || Math.abs(innerHeight - screen.height) > 2');
-          if (bad && win.isFullScreen()) { win.setFullScreen(false); setTimeout(() => win.setFullScreen(true), 500); }
-        } catch (e) {}
-      }, 1200);
-    }, 600);
-  });
+  if (process.env.COUCHTUNES_DEBUG) {   // prints the window and screen sizes, to help find fullscreen problems
+    for (const t of [500, 1500, 3000, 6000]) setTimeout(async () => {
+      const d = require('electron').screen.getPrimaryDisplay();
+      const r = await win.webContents.executeJavaScript('JSON.stringify({innerW:innerWidth,innerH:innerHeight,screenW:screen.width,screenH:screen.height,dpr:devicePixelRatio})').catch(e => String(e));
+      console.log('[couchtunes] t=' + t, 'fullscreen=' + win.isFullScreen(), 'bounds=' + JSON.stringify(win.getBounds()), 'content=' + JSON.stringify(win.getContentBounds()),
+        'display=' + JSON.stringify(d.bounds), 'scale=' + d.scaleFactor, r, 'platform=' + (process.env.XDG_SESSION_TYPE || '?'));
+    }, t);
+  }
   // ?tv turns on the 10-foot layout, focus navigation and game controller support
   win.loadFile(path.join(__dirname, 'app', 'index.html'), { query: { tv: '1' } });
   win.webContents.on('before-input-event', (e, i) => {
