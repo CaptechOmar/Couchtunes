@@ -538,6 +538,7 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .osk button:hover{background:var(--hover)}
 .osk button:focus,.tv .osk button:focus{outline:none;background:#fff;color:#111;transform:scale(1.28);box-shadow:0 .4rem 1.1rem rgba(0,0,0,.35);z-index:3;position:relative}
 .osk button:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.28);box-shadow:0 .4rem 1.1rem rgba(0,0,0,.35);z-index:3;position:relative}
+.osk .osk-br{flex-basis:100%;height:0;margin-top:-.35rem}
 .osk-hint{display:none;text-align:center;color:var(--fg2);font-size:.85rem;margin:.5rem 0 0}
 .has-pad .osk-hint{display:block}
 .osk-field{box-shadow:0 0 0 .18rem var(--fg2)}
@@ -2239,8 +2240,14 @@ window.addEventListener('mousedown', () => document.documentElement.classList.re
 window.addEventListener('wheel', () => document.documentElement.classList.remove('nomouse'), true);
 
 /* ----- On-screen keyboard (search page and sign-in) ----- */
-const OSK_ABC = 'abcdefghijklmnopqrstuvwxyz'.split(''), OSK_NUM = '1234567890.:/-_@+&?!,#%='.split('');
+const OSK_ABC = 'abcdefghijklmnopqrstuvwxyz'.split('');
+// Letters can be alphabetical (one flowing row, the original) or QWERTY with a number row on top.
+const OSK_QWERTY = ['1234567890', 'qwertyuiop', 'asdfghjkl', 'zxcvbnm'].map(r => r.split(''));
+// 123: numbers, the usual symbols, and a third row with the rest of the keyboard's characters (so any password can be typed).
+const OSK_NUM_ROWS = ['1234567890'.split(''), '.:/-_@+&?!,#%='.split(''), '^*()[]{}~`|\\;\'"<>$'.split('')];
 let oskMode = 'abc', oskCaps = false, oskField = null;
+let oskLayout = 'abc';   // 'abc' = alphabetical, 'qwerty'
+try { if (localStorage.getItem('cadence.osklayout') === 'qwerty') oskLayout = 'qwerty'; } catch (e) {}
 const oskTarget = () => {
   if (!$('#login').hidden) {
     const f = $('#login-form');
@@ -2250,12 +2257,15 @@ const oskTarget = () => {
   return view.dataset.kind === 'search' ? $('#q2') : null;
 };
 function oskHTML() {
-  const keys = oskMode === 'abc' ? OSK_ABC : OSK_NUM;
-  return `<button type="button" class="fn" data-osk="mode" aria-label="${oskMode === 'abc' ? 'Numbers and symbols' : 'Letters'}">${oskMode === 'abc' ? '123' : 'abc'}</button>`
+  const key = c => `<button type="button" data-osk="${esc(c)}" aria-label="${esc(c)}">${esc(oskCaps && oskMode === 'abc' ? c.toUpperCase() : c)}</button>`;
+  const br = '<span class="osk-br"></span>';
+  const del = `<button type="button" class="fn" data-osk="back" aria-label="Delete"><svg class="i"><use href="#i-backspace"/></svg></button>`;
+  const qwerty = oskMode === 'abc' && oskLayout === 'qwerty', rows = oskMode === 'num' ? OSK_NUM_ROWS : qwerty ? OSK_QWERTY : null;
+  return (oskMode === 'abc' ? `<button type="button" class="fn" data-osk="layout" aria-label="${qwerty ? 'Alphabetical keys' : 'QWERTY keys'}">${qwerty ? 'A–Z' : 'QWERTY'}</button>` : '')
+    + `<button type="button" class="fn" data-osk="mode" aria-label="${oskMode === 'abc' ? 'Numbers and symbols' : 'Letters'}">${oskMode === 'abc' ? '123' : 'abc'}</button>`
     + `<button type="button" class="fn" data-osk="space" aria-label="Space">space</button>`
     + (oskMode === 'abc' ? `<button type="button" class="fn${oskCaps ? ' on' : ''}" data-osk="caps" aria-label="Capital letter" aria-pressed="${oskCaps}">Aa</button>` : '')
-    + keys.map(c => `<button type="button" data-osk="${esc(c)}" aria-label="${esc(c)}">${esc(oskCaps && oskMode === 'abc' ? c.toUpperCase() : c)}</button>`).join('')
-    + `<button type="button" class="fn" data-osk="back" aria-label="Delete"><svg class="i"><use href="#i-backspace"/></svg></button>`;
+    + (rows ? rows.map((r, n) => br + r.map(key).join('') + (n === rows.length - 1 ? del : '')).join('') : OSK_ABC.map(key).join('') + del);
 }
 function renderOsk(refocus) {
   $$('.osk').forEach(o => {
@@ -2281,6 +2291,7 @@ document.addEventListener('paste', e => {
 function oskInput(t, v) { t.value = v; t.dispatchEvent(new Event('input', { bubbles: true })); }
 function oskPress(k, pad) {   // pad: pressed with a controller shortcut, so the focus stays where it is
   if (k === 'mode') { oskMode = oskMode === 'abc' ? 'num' : 'abc'; oskCaps = false; renderOsk(pad ? undefined : 'mode'); return; }
+  if (k === 'layout') { oskLayout = oskLayout === 'qwerty' ? 'abc' : 'qwerty'; try { localStorage.setItem('cadence.osklayout', oskLayout); } catch (e) {} renderOsk(pad ? undefined : 'layout'); return; }
   if (k === 'caps') { oskCaps = !oskCaps; renderOsk(pad ? undefined : 'caps'); return; }
   const t = oskTarget(); if (!t) return;
   if (k === 'back') oskInput(t, t.value.slice(0, -1));
