@@ -16,7 +16,7 @@ function create() {
   });
   const win = new BrowserWindow({
     width: 1280, height: 720, fullscreen: true, minWidth: 640, minHeight: 400, backgroundColor: '#111111', title: 'Couchtunes',
-    autoHideMenuBar: true, icon: path.join(__dirname, 'icon.png'),
+    autoHideMenuBar: true, icon: path.join(__dirname, process.platform === 'win32' ? 'icon-win.png' : 'icon.png'),
     webPreferences: { backgroundThrottling: false, spellcheck: false }
   });
   Menu.setApplicationMenu(null);

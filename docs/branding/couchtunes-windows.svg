@@ -1,0 +1,19 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+	<defs>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(348.16,1024,-1024,348.16,337.92,0)">
+			<stop offset="0" stop-color="#ff5e6c"/>
+			<stop offset=".55" stop-color="#fa243c"/>
+			<stop offset="1" stop-color="#c9102a"/>
+		</linearGradient>
+	</defs>
+	<style>
+		.s0 { fill: url(#g1) } 
+		.s1 { fill: #ffffff } 
+	</style>
+	<path id="Shape 1" fill-rule="evenodd" class="s0" d="m232 0h560c128.13 0 232 103.87 232 232v560c0 128.13-103.87 232-232 232h-560c-128.13 0-232-103.87-232-232v-560c0-128.13 103.87-232 232-232z"/>
+	<path id="Shape 2" fill-rule="evenodd" class="s1" d="m373.04 315.68l322.04-73.04v102.92l-322.04 73.04z"/>
+	<path id="Shape 3" fill-rule="evenodd" class="s1" d="m373.04 315.68h49.8v385.12h-49.8z"/>
+	<path id="Shape 4" fill-rule="evenodd" class="s1" d="m645.28 277.5h49.8v370.18h-49.8z"/>
+	<path id="Shape 5" fill-rule="evenodd" class="s1" d="m419.67 674.23c14.74 40.49-13.82 88.06-63.79 106.24-49.96 18.19-102.42 0.11-117.15-40.38-14.74-40.49 13.82-88.06 63.79-106.24 49.96-18.19 102.42-0.11 117.15 40.38z"/>
+	<path id="Shape 6" fill-rule="evenodd" class="s1" d="m690.91 622.11c14.74 40.49-13.82 88.06-63.79 106.24-49.96 18.19-102.42 0.11-117.15-40.38-14.74-40.49 13.82-88.06 63.79-106.24 49.96-18.19 102.42-0.11 117.15 40.38z"/>
+</svg>

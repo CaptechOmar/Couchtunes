@@ -1,0 +1,30 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Couchtunes">
+	<title>Couchtunes</title>
+	<defs>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(104,0,0,100,12,66)">
+			<stop offset="0" stop-color="#b40418"/>
+			<stop offset=".036" stop-color="#fc7488"/>
+			<stop offset=".073" stop-color="#b40418"/>
+			<stop offset=".927" stop-color="#b40418"/>
+			<stop offset=".961" stop-color="#fc7488"/>
+			<stop offset="1" stop-color="#b40418"/>
+		</linearGradient>
+		<linearGradient id="g2" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-0.056,-67.557,70.255,-0.058,84.336,102.576)">
+			<stop offset="0" stop-color="#fa233b"/>
+			<stop offset="1" stop-color="#fb5c74"/>
+		</linearGradient>
+	</defs>
+	<style>
+		.s0 { fill: url(#g1) } 
+		.s1 { fill: url(#g2) } 
+	</style>
+	<path id="rect1711-5" fill-rule="evenodd" class="s0" d="m20 16h88c4.42 0 8 3.58 8 8v84c0 4.42-3.58 8-8 8h-88c-4.42 0-8-3.58-8-8v-84c0-4.42 3.58-8 8-8z"/>
+	<path id="rect1711" fill-rule="evenodd" class="s1" d="m20 12h88c4.42 0 8 3.58 8 8v84c0 4.42-3.58 8-8 8h-88c-4.42 0-8-3.58-8-8v-84c0-4.42 3.58-8 8-8z"/>
+	<g transform="matrix(.125 0 0 .125 1 -3)">
+		<path fill="#fff" fill-rule="evenodd" d="m373.04 315.68l322.04-73.04v102.92l-322.04 73.04z"/>
+		<path fill="#fff" fill-rule="evenodd" d="m373.04 315.68h49.8v385.12h-49.8z"/>
+		<path fill="#fff" fill-rule="evenodd" d="m645.28 277.5h49.8v370.18h-49.8z"/>
+		<path fill="#fff" fill-rule="evenodd" d="m419.67 674.23c14.74 40.49-13.82 88.06-63.79 106.24-49.96 18.19-102.42 0.11-117.15-40.38-14.74-40.49 13.82-88.06 63.79-106.24 49.96-18.19 102.42-0.11 117.15 40.38z"/>
+		<path fill="#fff" fill-rule="evenodd" d="m690.91 622.11c14.74 40.49-13.82 88.06-63.79 106.24-49.96 18.19-102.42 0.11-117.15-40.38-14.74-40.49 13.82-88.06 63.79-106.24 49.96-18.19 102.42-0.11 117.15 40.38z"/>
+	</g>
+</svg>
