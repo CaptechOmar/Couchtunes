@@ -145,3 +145,5 @@ Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 [MIT](LICENSE). The desktop builds include Electron, which is MIT licensed, and Chromium, whose licenses ship inside each build.
 
 Ogg Opus playback on TVs uses [ogg-opus-decoder](https://github.com/eshaz/wasm-audio-decoders) (MIT, © Ethan Halsall), embedded in the app. Added by [@Grumley](https://github.com/Grumley) in #3.
+
+The Linux and Flatpak icon (and the logo at the top of this page) is based on the Apple Music icon from [MoreWaita](https://github.com/somepaulo/MoreWaita) by somepaulo and contributors ([GPL-3.0](https://github.com/somepaulo/MoreWaita/blob/main/LICENSE)), modified with a different note. See [docs/branding](docs/branding/README.md).
