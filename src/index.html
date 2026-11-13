@@ -539,6 +539,10 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .osk button:focus,.tv .osk button:focus{outline:none;background:#fff;color:#111;transform:scale(1.28);box-shadow:0 .4rem 1.1rem rgba(0,0,0,.35);z-index:3;position:relative}
 .osk button:focus-visible{outline:none;background:#fff;color:#111;transform:scale(1.28);box-shadow:0 .4rem 1.1rem rgba(0,0,0,.35);z-index:3;position:relative}
 .osk .osk-br{flex-basis:100%;height:0;margin-top:-.35rem}
+.osk .osk-row{flex:0 0 100%;display:flex;justify-content:center;gap:.2rem}
+.osk .osk-row button{flex:1 1 0;min-width:0;padding:0}
+.osk .osk-row.r3,.osk .osk-row.r4{padding:0 4.5%}
+.osk .osk-row button.fn{flex:2 1 0;margin:0}
 .osk-hint{display:none;text-align:center;color:var(--fg2);font-size:.85rem;margin:.5rem 0 0}
 .has-pad .osk-hint{display:block}
 .osk-field{box-shadow:0 0 0 .18rem var(--fg2)}
@@ -2243,8 +2247,8 @@ window.addEventListener('wheel', () => document.documentElement.classList.remove
 const OSK_ABC = 'abcdefghijklmnopqrstuvwxyz'.split('');
 // Letters can be alphabetical (one flowing row, the original) or QWERTY with a number row on top.
 const OSK_QWERTY = ['1234567890', 'qwertyuiop', 'asdfghjkl', 'zxcvbnm'].map(r => r.split(''));
-// 123: numbers, the usual symbols, and a third row with the rest of the keyboard's characters (so any password can be typed).
-const OSK_NUM_ROWS = ['1234567890'.split(''), '.:/-_@+&?!,#%='.split(''), '^*()[]{}~`|\\;\'"<>$'.split('')];
+// 123: numbers and the usual symbols on one line, and a second row with the rest of the keyboard's characters (so any password can be typed).
+const OSK_NUM_ROWS = ['1234567890.:/-_@+&?!,#%='.split(''), '^*()[]{}~`|\\;\'"<>$'.split('')];
 let oskMode = 'abc', oskCaps = false, oskField = null;
 let oskLayout = 'abc';   // 'abc' = alphabetical, 'qwerty'
 try { if (localStorage.getItem('cadence.osklayout') === 'qwerty') oskLayout = 'qwerty'; } catch (e) {}
@@ -2265,7 +2269,9 @@ function oskHTML() {
     + `<button type="button" class="fn" data-osk="mode" aria-label="${oskMode === 'abc' ? 'Numbers and symbols' : 'Letters'}">${oskMode === 'abc' ? '123' : 'abc'}</button>`
     + `<button type="button" class="fn" data-osk="space" aria-label="Space">space</button>`
     + (oskMode === 'abc' ? `<button type="button" class="fn${oskCaps ? ' on' : ''}" data-osk="caps" aria-label="Capital letter" aria-pressed="${oskCaps}">Aa</button>` : '')
-    + (rows ? rows.map((r, n) => br + r.map(key).join('') + (n === rows.length - 1 ? del : '')).join('') : OSK_ABC.map(key).join('') + del);
+    + (qwerty ? rows.map((r, n) => `<div class="osk-row r${n + 1}">${r.map(key).join('')}${n === rows.length - 1 ? del : ''}</div>`).join('')
+      : rows ? rows.map((r, n) => (n ? br : '') + r.map(key).join('') + (n === rows.length - 1 ? del : '')).join('')
+      : OSK_ABC.map(key).join('') + del);
 }
 function renderOsk(refocus) {
   $$('.osk').forEach(o => {
@@ -2741,6 +2747,16 @@ function spatial(dir) {
     const items = $$('#sort-menu button'), i = items.indexOf(from);
     if (dir === 'up' || dir === 'down') { const n = i < 0 ? 0 : Math.max(0, Math.min(items.length - 1, i + (dir === 'down' ? 1 : -1))); go(items[n]); }
     return;
+  }
+  if ((dir === 'up' || dir === 'down') && from.closest && from.closest('.osk')) {   // Up / Down walk the lines of the keyboard; only above the first or below the last line do they leave it
+    const keys = $$('button', from.closest('.osk')).filter(b => b.offsetParent), mid = b => { const r = b.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+    const lines = []; keys.forEach(b => { const y = mid(b)[1], l = lines.find(x => Math.abs(x.y - y) < 12); if (l) l.keys.push(b); else lines.push({ y, keys: [b] }); });
+    lines.sort((a, b) => a.y - b.y);
+    const li = lines.findIndex(l => l.keys.includes(from)), next = lines[li + (dir === 'down' ? 1 : -1)];
+    if (li >= 0 && next) {
+      const fx = mid(from)[0]; go(next.keys.reduce((best, b) => Math.abs(mid(b)[0] - fx) < Math.abs(mid(best)[0] - fx) ? b : best));
+      return;
+    }
   }
   if ((dir === 'left' || dir === 'right') && from.closest && from.closest('.osk')) {   // the keys are one row, even when a small screen wraps them onto two lines
     const keys = $$('button', from.closest('.osk')).filter(b => b.offsetParent), j = keys.indexOf(from) + (dir === 'right' ? 1 : -1);
