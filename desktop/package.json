@@ -1,11 +1,10 @@
 {
   "name": "couchtunes",
-  "version": "2.16.8-beta.1",
+  "version": "2.16.7",
   "description": "An Apple Music-style player for your Navidrome server, built for TVs and big screens",
   "author": "Omar Ashraf",
   "homepage": "https://github.com/CaptechOmar/Couchtunes",
   "main": "main.js",
-  "desktopName": "io.github.captechomar.Couchtunes.desktop",
   "license": "MIT",
   "scripts": {
     "prepare-app": "node ../scripts/copy-app.mjs",
