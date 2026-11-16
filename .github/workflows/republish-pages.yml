@@ -1,0 +1,49 @@
+name: Republish the Homebrew and Flatpak repos
+
+# GitHub Pages ignores a deploy that comes from a commit it has already deployed. A stable tag placed on the same
+# commit as its last pre-release therefore never goes live. Run this from main to publish a release's files again.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Stable release tag to publish (for example v2.16.7)
+        required: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  republish:
+    runs-on: ubuntu-latest
+    concurrency: { group: pages, cancel-in-progress: false }
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ inputs.tag }}" }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Download the release files
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          mkdir -p ipk flatpak-bundle
+          gh release download "${{ inputs.tag }}" -R "${{ github.repository }}" -p '*.ipk' -D ipk
+          gh release download "${{ inputs.tag }}" -R "${{ github.repository }}" -p 'Couchtunes.flatpak' -D flatpak-bundle
+      - run: node scripts/gen-hbc-repo.mjs ipk/*.ipk "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ inputs.tag }}" site
+      - name: Build the signed Flatpak repository
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.FLATPAK_GPG_PRIVATE_KEY }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq flatpak ostree gnupg
+          if [ -n "$GPG_PRIVATE_KEY" ]; then
+            echo "$GPG_PRIVATE_KEY" | base64 -d | gpg --batch --import
+            export FLATPAK_GPG_KEY_ID="$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr/{print $10; exit}')"
+          fi
+          scripts/gen-flatpak-repo.sh flatpak-bundle/Couchtunes.flatpak "${{ github.repository_owner }}" "${{ github.event.repository.name }}" site
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: site }
+      - id: deploy
+        uses: actions/deploy-pages@v4
