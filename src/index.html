@@ -389,7 +389,6 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .ly-l.on{color:#fff;transform:scale(1.04)}
 .ly-pad{height:40%}
 .ly-msg{color:rgba(255,255,255,.7);font-size:1.1rem;padding:2rem 0}
-.np .ib.on#np-lyrics,.np #np-lyrics.on{background:rgba(255,255,255,.2)}
 
 /* Lyrics mode: the side column dissolves into the page grid. Art + title/lyrics on top, a wide seek bar,
    transport bottom-left, heart / lyrics / Up next bottom-right. */
@@ -419,6 +418,9 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .np .ib.sm{color:rgba(255,255,255,.65)}
 .np .ib.on{color:#fff;background:rgba(255,255,255,.2)}
 .np .ib:hover{background:rgba(255,255,255,.14)}
+/* Lyrics and Up next, while open: a light rounded key with a dark icon */
+.np-act .ib.on:not(.heart){background:rgba(255,255,255,.66);color:#2a3235;border-radius:.8rem}
+.np-act .ib.on:not(.heart):hover{background:rgba(255,255,255,.76)}
 .np .ib.big{width:min(5.4rem,10.5vh);height:min(5.4rem,10.5vh)}
 .np .ib.big svg.i{width:min(4rem,7.8vh);height:min(4rem,7.8vh)}
 .np .ib svg.i{width:1.5rem;height:1.5rem}
@@ -1678,6 +1680,7 @@ function setQueue(open, silent, fromPop) {
     queueEl.classList.toggle('open', open); queueEl.setAttribute('aria-hidden', String(!open));
     if (open) { renderQueue(); const f = $('.qi.cur', queueEl) || $('[data-act="queue-close"]', queueEl); if (TV && f) f.focus(); }
   }
+  const qb = $('.np-act [data-act="queue"]'); if (qb) qb.classList.toggle('on', !!(open && inNP));
   if (!open && was) { if (!fromPop) popOv('queue'); if (!silent) restoreFocus('queue'); }
 }
 /* ----- Lyrics (Navidrome serves .lrc / embedded lyrics through the OpenSubsonic API) ----- */
