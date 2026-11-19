@@ -212,6 +212,16 @@ select.sel option{color:#111;background:#fff}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(10.5rem,1fr));gap:1.7rem 1.2rem;margin-top:1.1rem}
 .row{display:grid;grid-auto-flow:column;grid-auto-columns:10.5rem;gap:1.2rem;overflow-x:auto;padding:2rem 2rem 2.6rem;margin:-1.8rem -2rem -1.7rem;scroll-snap-type:x proximity;scroll-padding:0 2rem;}
 .row .card{scroll-snap-align:start}
+/* Scroll arrows at the ends of an album row: they appear only while the mouse or the TV pointer is in use, and look like the on-screen keyboard keys */
+.rowwrap{position:relative}
+.rarr{position:absolute;z-index:4;width:2.8rem;height:3.4rem;margin-top:-1.7rem;padding:0;display:flex;align-items:center;justify-content:center;border-radius:.7rem;border:0;color:var(--fg);
+  background-color:var(--bg);background-image:linear-gradient(var(--sel),var(--sel));box-shadow:0 .3rem .9rem rgba(0,0,0,.28);opacity:0;pointer-events:none;transition:opacity .15s ease,background-color .15s ease}
+.rarr[hidden]{display:none}
+.rarr.l{left:-.7rem}.rarr.r{right:-.7rem}
+.rarr svg.i{width:1.5rem;height:1.5rem}
+.rarr.l svg.i{transform:rotate(180deg)}
+html:not(.nomouse) .rowwrap:hover .rarr{opacity:1;pointer-events:auto}
+html:not(.nomouse) .rarr:hover{background-image:linear-gradient(var(--hover),var(--hover)),linear-gradient(var(--sel),var(--sel))}
 .card{position:relative;min-width:0}
 .art{display:block;position:relative;aspect-ratio:1;border-radius:.5rem;overflow:hidden;background:var(--card);box-shadow:var(--shadow);display:grid;place-items:center}
 .art,.trk,.btn{scroll-margin:3rem}
@@ -1861,8 +1871,34 @@ async function viewListen(my) {
   if (!alive(my)) return;
   if (!rows.length && !radios.length) { view.innerHTML = empty('Your library is empty', 'Add music to Navidrome and let it finish scanning, then come back.'); return; }
   view.innerHTML = '<h1 class="h1">Listen now</h1>' + rows.map(([t, a]) =>
-    `<section><h2 class="h2">${t}</h2><div class="row">${a.map(albumCard).join('')}</div></section>`).join('') +
-    (radios.length ? `<section><h2 class="h2">Radio</h2><div class="row">${radios.map(radioCard).join('')}</div></section>` : '');
+    `<section><h2 class="h2">${t}</h2>${rowWrap(a.map(albumCard).join(''))}</section>`).join('') +
+    (radios.length ? `<section><h2 class="h2">Radio</h2>${rowWrap(radios.map(radioCard).join(''))}</section>` : '');
+  rowArrows(view);
+}
+
+/* A row with a scroll arrow at each end (shown by the stylesheet only while the mouse or TV pointer is in use). The arrows are
+   tabindex -1, so the remote and the controller never land on them. */
+const rowWrap = inner => `<div class="rowwrap"><div class="row">${inner}</div>` +
+  ['l', 'r'].map(d => `<button class="rarr ${d}" tabindex="-1" hidden aria-label="Scroll ${d === 'l' ? 'left' : 'right'}"><svg class="i"><use href="#i-chev"/></svg></button>`).join('') + '</div>';
+function rowArrows(root) {
+  Array.prototype.forEach.call(root.querySelectorAll('.rowwrap'), w => {
+    const row = w.querySelector('.row'), l = w.querySelector('.rarr.l'), r = w.querySelector('.rarr.r');
+    const upd = () => {
+      const max = row.scrollWidth - row.clientWidth;
+      l.hidden = row.scrollLeft < 4; r.hidden = row.scrollLeft > max - 4;
+      const art = row.querySelector('.art');            // centre the arrows on the cover art
+      if (art) { const t = art.getBoundingClientRect(), b = w.getBoundingClientRect(); l.style.top = r.style.top = (t.top - b.top + t.height / 2) + 'px'; }
+    };
+    const go = dir => {
+      const x = row.scrollLeft + dir * row.clientWidth * 0.85;
+      if ('scrollBehavior' in document.documentElement.style) row.scrollTo({ left: x, behavior: 'smooth' }); else row.scrollLeft = x;
+    };
+    l.addEventListener('click', e => { e.preventDefault(); go(-1); });
+    r.addEventListener('click', e => { e.preventDefault(); go(1); });
+    row.addEventListener('scroll', upd);
+    w.addEventListener('mouseenter', upd);
+    upd();
+  });
 }
 
 /* ----- Albums (sortable, paged) ----- */
