@@ -30,6 +30,10 @@ function create() {
   }
   // ?tv turns on the 10-foot layout, focus navigation and game controller support
   win.loadFile(path.join(__dirname, 'app', 'index.html'), { query: { tv: '1' } });
+  // Tell the page whether this window is the active one, so a controller only drives the app while you are in it.
+  const sendFocus = () => { if (!win.isDestroyed()) win.webContents.executeJavaScript('window.cfFocus=' + win.isFocused()).catch(() => {}); };
+  win.on('focus', sendFocus); win.on('blur', sendFocus); win.on('minimize', sendFocus); win.on('restore', sendFocus); win.on('show', sendFocus); win.on('hide', sendFocus);
+  win.webContents.on('did-finish-load', sendFocus);
   win.webContents.on('before-input-event', (e, i) => {
     if (i.type === 'keyDown' && i.key === 'F11') { win.setFullScreen(!win.isFullScreen()); e.preventDefault(); }
   });

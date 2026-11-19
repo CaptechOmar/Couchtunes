@@ -3101,9 +3101,19 @@ window.addEventListener('keyup', e => {
     const ev = key(13, 'Enter');
     if (!ev.defaultPrevented && a && a !== document.body && a.matches && a.matches('a,button,summary,[role="button"]')) a.click();
   };
-  const pulse = (name, down, fn, repeat) => { if (down) { if (press(name, 0, repeat)) fn(); } else release(name); };
+  // Only the window you are looking at takes pad input. Steam's overlay and big-picture mode, the GNOME overview and other apps in front
+  // leave the pad readable here, so without this check a button press meant for them skips tracks. The desktop app reports its window
+  // focus as window.cfFocus; a browser falls back to document.hasFocus(). A button that is still held when focus returns is ignored
+  // until it is released, so coming back to the app does not fire it.
+  const active = () => REAL_TV || (!document.hidden && (window.cfFocus !== undefined ? window.cfFocus : document.hasFocus()));
+  let on = true;
+  const pulse = (name, down, fn, repeat) => {
+    if (!on) { if (down) held[name] = Infinity; else release(name); return; }
+    if (down) { if (press(name, 0, repeat)) fn(); } else release(name);
+  };
   function tick() {
     const pads = Array.prototype.slice.call(navigator.getGamepads() || []);   // old TVs return a list object without array methods
+    on = active();
     for (const g of pads) {
       if (!g || !g.connected) continue;
       const b = i => !!(g.buttons[i] && g.buttons[i].pressed);
