@@ -418,9 +418,13 @@ body.is-playing .np-art{transform:none;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .np .ib.sm{color:rgba(255,255,255,.65)}
 .np .ib.on{color:#fff;background:rgba(255,255,255,.2)}
 .np .ib:hover{background:rgba(255,255,255,.14)}
-/* Lyrics and Up next, while open: a light rounded key with a dark icon */
-.np-act .ib.on:not(.heart),.tv .np .np-act .ib.on:not(.heart):focus,.tv .np .np-act .ib.on:not(.heart):focus-visible{background:#b4bbbd;color:#2a3235;border-radius:1rem}
-.np-act .ib.on:not(.heart):hover{background:#c0c6c8}
+/* Shuffle, Repeat, Lyrics and Up next: a soft rounded key. Switched on it is a light key with a dark icon; hovering or moving over it
+   (mouse, keys, remote, controller) makes the corners slightly rounder, and the same key shape shows when it is off. */
+.np .ib.kk,.np .ib.kk:hover,.tv .np .ib.kk:focus,.tv .np .ib.kk:focus-visible{border-radius:.5rem}
+.np .ib.kk.on{background:#b4bbbd;color:#2a3235}
+.np .ib.kk.on:hover{background:#c0c6c8}
+.np .ib.kk.on:hover,.tv .np .ib.kk.on:focus,.tv .np .ib.kk.on:focus-visible{border-radius:.8rem}
+.tv .np .ib.kk.on:focus,.tv .np .ib.kk.on:focus-visible{background:#b4bbbd;color:#2a3235}
 .np .ib.big{width:min(5.4rem,10.5vh);height:min(5.4rem,10.5vh)}
 .np .ib.big svg.i{width:min(4rem,7.8vh);height:min(4rem,7.8vh)}
 .np .ib svg.i{width:1.5rem;height:1.5rem}
@@ -793,16 +797,16 @@ kbd{display:inline-flex;align-items:center;justify-content:center;min-width:2rem
       <div class="np-ly" id="np-ly" aria-label="Lyrics"><div class="ly-list" id="ly-list"></div></div>
       <div class="np-bar"><span class="js-cur">0:00</span><span class="seek"><i class="seek-fill"></i><input class="js-seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek"></span><span class="js-dur">0:00</span></div>
       <div class="np-ctl">
-        <button class="ib sm" data-act="shuffle" aria-label="Shuffle"><svg class="i"><use href="#i-shuffle"/></svg></button>
+        <button class="ib sm kk" data-act="shuffle" aria-label="Shuffle"><svg class="i"><use href="#i-shuffle"/></svg></button>
         <button class="ib" data-act="prev" aria-label="Previous"><svg class="i"><use href="#i-prev"/></svg></button>
         <button class="ib big" data-act="toggle" aria-label="Play or pause"><svg class="i ic-play"><use href="#i-play"/></svg><svg class="i ic-pause"><use href="#i-pause"/></svg></button>
         <button class="ib" data-act="next" aria-label="Next"><svg class="i"><use href="#i-next"/></svg></button>
-        <button class="ib sm" data-act="repeat" aria-label="Repeat"><svg class="i ic-rep"><use href="#i-repeat"/></svg><svg class="i ic-rep1"><use href="#i-repeat1"/></svg></button>
+        <button class="ib sm kk" data-act="repeat" aria-label="Repeat"><svg class="i ic-rep"><use href="#i-repeat"/></svg><svg class="i ic-rep1"><use href="#i-repeat1"/></svg></button>
       </div>
       <div class="np-act">
         <button class="ib heart" id="np-heart" data-act="star-current" aria-label="Favorite"><svg class="i"><use href="#i-heart"/></svg></button>
-        <button class="ib" data-act="lyrics" id="np-lyrics" aria-label="Lyrics"><svg class="i"><use href="#i-lyrics"/></svg></button>
-        <button class="ib" data-act="queue" aria-label="Up next"><svg class="i"><use href="#i-queue"/></svg></button>
+        <button class="ib kk" data-act="lyrics" id="np-lyrics" aria-label="Lyrics"><svg class="i"><use href="#i-lyrics"/></svg></button>
+        <button class="ib kk" data-act="queue" aria-label="Up next"><svg class="i"><use href="#i-queue"/></svg></button>
       </div>
     </div>
   </div>
@@ -1516,6 +1520,7 @@ function toggleShuffle() {
 function cycleRepeat() { P.repeat = { off: 'all', all: 'one', one: 'off' }[P.repeat]; syncModes(); }
 function syncModes() {
   $$('[data-act="shuffle"]').forEach(b => b.classList.toggle('on', P.shuffle));
+  $$('[data-act="repeat"]').forEach(b => b.classList.toggle('on', P.repeat !== 'off'));
   document.body.dataset.repeat = P.repeat;
 }
 function addToQueue(song) {
