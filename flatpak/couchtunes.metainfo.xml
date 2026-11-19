@@ -49,6 +49,7 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="2.16.8-beta.3" type="development" date="2026-11-19"/>
     <release version="2.16.8-beta.2" type="development" date="2026-11-19"/>
     <release version="2.16.8-beta.1" type="development" date="2026-11-19"/>
     <release version="2.16.7" date="2026-11-12"/>
